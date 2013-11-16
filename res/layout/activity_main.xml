@@ -4,18 +4,12 @@
     android:background="#ffffff"
     android:orientation="vertical" >
 
-    <ImageView
+    <ImageButton
         android:id="@+id/phone_icon"
-        android:layout_width="match_parent"
-        android:layout_height="202dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/phone_on" />
-
-    <Button
-        android:id="@+id/toggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/toggle_silent_mode" />
+        android:src="@drawable/phone_on" />
 
+    
 </LinearLayout>

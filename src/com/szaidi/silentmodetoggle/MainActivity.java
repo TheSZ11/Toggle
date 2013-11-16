@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 public class MainActivity extends Activity {
@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
 	}
 	
 	private void setButtonClickListener() {
-		Button toggleButton = (Button)findViewById(R.id.toggleButton);
+		ImageButton toggleButton = (ImageButton)findViewById(R.id.phone_icon);
 		toggleButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v) {
@@ -68,7 +68,7 @@ public class MainActivity extends Activity {
 	 */
 	
 	private void toggleUi() {
-		ImageView	 imageView = (ImageView) findViewById(R.id.phone_icon);
+		ImageView imageView = (ImageView) findViewById(R.id.phone_icon);
 		Drawable newPhoneImage;
 		
 		if(mPhoneIsSilent) {
