@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
+
 
 public class MainActivity extends Activity {
 	
@@ -47,13 +47,11 @@ public class MainActivity extends Activity {
 				if(!wifiEnabled)
 				{
 					wifiManager.setWifiEnabled(true);
-					Toast.makeText(getBaseContext(), "WiFi turned on!", Toast.LENGTH_SHORT).show();
 					wifiEnabled = true;
 				}
 				else
 				{
 					wifiManager.setWifiEnabled(false);
-					Toast.makeText(getBaseContext(), "WiFi turned off!", Toast.LENGTH_SHORT).show();
 					wifiEnabled = false;
 				}
 				
@@ -75,13 +73,11 @@ public class MainActivity extends Activity {
 					// change back to normal mode
 					mAudioManager
 						.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-					Toast.makeText(getBaseContext(), "Silent mode disabled!", Toast.LENGTH_SHORT).show();
 					mPhoneIsSilent = false;
 				} else {
 					// Change to silent
 					mAudioManager
 						.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-					Toast.makeText(getBaseContext(), "Silent mode enabled!", Toast.LENGTH_SHORT).show();
 					mPhoneIsSilent = true;
 				}
 				
