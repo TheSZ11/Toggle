@@ -1,17 +1,21 @@
 package com.szaidi.silentmodetoggle;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
-	private AudioManager mAudioManager;
-	private boolean mPhoneIsSilent;
+	private AudioManager mAudioManager; //used to change the audio settings
+	private boolean mPhoneIsSilent; //Checks to see what mode the phone is on at the moment
+	private boolean wifiEnabled; //Checks to see if the device WiFi is enabled at the moment
 	
 
 	@Override
@@ -21,26 +25,63 @@ public class MainActivity extends Activity {
 		
 		mAudioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
 		
+		//Call all the set up functions here
 		checkIfPhoneIsSilent();
-		
+		checkIfWifiIsOn();
 		setButtonClickListener();
+		setButtonClickListenerWifi();
+		
+	}
+	
+	//Logic for the WiFi toggle button
+	private void  setButtonClickListenerWifi() {
+		
+		ImageButton wifiButton = (ImageButton)findViewById(R.id.wifi_icon);
+		wifiButton.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				
+				WifiManager wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+				wifiEnabled = wifiManager.isWifiEnabled(); //Check again if WiFi is enabled
+				
+				if(!wifiEnabled)
+				{
+					wifiManager.setWifiEnabled(true);
+					Toast.makeText(getBaseContext(), "WiFi turned on!", Toast.LENGTH_SHORT).show();
+					wifiEnabled = true;
+				}
+				else
+				{
+					wifiManager.setWifiEnabled(false);
+					Toast.makeText(getBaseContext(), "WiFi turned off!", Toast.LENGTH_SHORT).show();
+					wifiEnabled = false;
+				}
+				
+				//Call function to toggle the image
+				toggleWifiUi();
+			
+			}
+			});
 	}
 	
 	private void setButtonClickListener() {
+		
 		ImageButton toggleButton = (ImageButton)findViewById(R.id.phone_icon);
-		toggleButton.setOnClickListener(new View.OnClickListener()
-		{
+		toggleButton.setOnClickListener(new View.OnClickListener() {
+			
 			public void onClick(View v) {
 				
 				if(mPhoneIsSilent) {
 					// change back to normal mode
 					mAudioManager
 						.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+					Toast.makeText(getBaseContext(), "Silent mode disabled!", Toast.LENGTH_SHORT).show();
 					mPhoneIsSilent = false;
 				} else {
 					// Change to silent
 					mAudioManager
 						.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+					Toast.makeText(getBaseContext(), "Silent mode enabled!", Toast.LENGTH_SHORT).show();
 					mPhoneIsSilent = true;
 				}
 				
@@ -55,6 +96,7 @@ public class MainActivity extends Activity {
 	 */
 
 	private void checkIfPhoneIsSilent() {
+		
 		int ringerMode = mAudioManager.getRingerMode();
 		if (ringerMode == AudioManager.RINGER_MODE_SILENT) {
 			mPhoneIsSilent = true;
@@ -64,7 +106,17 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
-	 * Toggles the UI images from silent to normal and Vice Versa.
+	 * Checks to see if WiFi is on
+	 */
+	
+	private void checkIfWifiIsOn() {
+		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		wifiEnabled = wifiManager.isWifiEnabled();
+	}
+	
+	
+	/**
+	 * Toggles the UI images for the Silent button from silent to normal and Vice Versa.
 	 */
 	
 	private void toggleUi() {
@@ -72,21 +124,39 @@ public class MainActivity extends Activity {
 		Drawable newPhoneImage;
 		
 		if(mPhoneIsSilent) {
-			newPhoneImage = 
-					getResources().getDrawable(R.drawable.phone_off);
+			newPhoneImage = getResources().getDrawable(R.drawable.phone_off);
 		} else {
-			newPhoneImage = 
-					getResources().getDrawable(R.drawable.phone_on);
+			newPhoneImage = getResources().getDrawable(R.drawable.phone_on);
 		}
 		
 		imageView.setImageDrawable(newPhoneImage);
+	}
+	
+	/**
+	 * Toggles the WiFi images UI
+	 */
+	
+	private void toggleWifiUi() {
+		
+		ImageView imageView = (ImageView) findViewById(R.id.wifi_icon);
+		Drawable newWifiImage;
+				
+		if(!wifiEnabled) {
+			newWifiImage = getResources().getDrawable(R.drawable.wifi_off);
+		} else {
+			newWifiImage = getResources().getDrawable(R.drawable.wifi_on);
+		}
+		
+		imageView.setImageDrawable(newWifiImage);
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		checkIfPhoneIsSilent();
+		checkIfWifiIsOn();
 		toggleUi();
+		toggleWifiUi();
 	}
 
 }
