@@ -31,7 +31,7 @@
  
         <receiver
             android:name=".ToggleWidget"
-            android:label="@string/app_name"
+            android:label="Silent Toggle"
             android:icon="@drawable/ic_launcher">
             <intent-filter >
                 <action
@@ -42,8 +42,21 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_provider" />
          </receiver>
-            
         <service android:name=".ToggleWidget$ToggleService" />
+        
+        <receiver
+            android:name=".WifiWidget"
+            android:label="WiFi Toggle"
+            android:icon="@drawable/ic_launcher">
+            <intent-filter>
+                <action
+                    android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/wifi_provider" />
+        </receiver>
+        <service android:name=".WifiWidget$ToggleWifiService" />
     </application>
 
 </manifest>
